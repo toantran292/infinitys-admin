@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { config } from "~/common/config";
 import { useAuth } from "~/providers/auth-provider";
 
 type SignInFormData = {
@@ -25,7 +24,9 @@ export default function SignIn() {
     resolver: zodResolver(signInSchema)
   });
 
-  console.log(config);
+
+  console.log(auth.message);
+
 
   return (
     <div className="h-screen flex flex-col justify-center items-center space-y-4">
@@ -84,6 +85,13 @@ export default function SignIn() {
             >
               {isSigningIn ? "Đang xử lý..." : "Đăng nhập"}
             </button>
+            {auth.message && (
+              <p
+                className={`mt-3 text-sm ${auth.message.includes("thành công") ? "text-green-600" : "text-red-600"}`}
+              >
+                {auth.message}
+              </p>
+            )}
           </div>
         </div>
       </form>

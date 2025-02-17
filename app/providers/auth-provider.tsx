@@ -123,6 +123,10 @@ export const AuthProvider = ({ children }) => {
     },
     onError: (error) => {
       console.error("Error signing in:", error);
+      setAuth({
+        ...defaultAuth,
+        message: error.response.data.message
+      });
     }
   });
 
