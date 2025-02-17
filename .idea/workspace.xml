@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c72042bb-d22c-403e-bd14-73f4dd2a12cb" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/app/components/private-route.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/.env.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/auth/sign-in.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/auth/sign-in.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/common/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/common/config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/providers/auth-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/providers/auth-provider.tsx" afterDir="false" />
+    <list default="true" id="c72042bb-d22c-403e-bd14-73f4dd2a12cb" name="Changes" comment="protect route">
+      <change afterPath="$PROJECT_DIR$/app/components/default.layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/components/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +79,7 @@
       <option name="presentableId" value="Default" />
       <updated>1739728153447</updated>
       <workItem from="1739728154502" duration="2781000" />
-      <workItem from="1739731480672" duration="6461000" />
+      <workItem from="1739731480672" duration="7329000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -90,7 +89,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739728817015</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="protect route">
+      <option name="closed" value="true" />
+      <created>1739781187462</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739781187462</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -98,6 +105,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="protect route" />
+    <option name="LAST_COMMIT_MESSAGE" value="protect route" />
   </component>
 </project>
