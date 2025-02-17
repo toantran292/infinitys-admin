@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "~/providers/auth-provider";
+import {useEffect} from "react";
+import {useNavigate} from "react-router";
 
 type SignInFormData = {
   email: string;
@@ -15,6 +17,13 @@ const signInSchema = z.object({
 
 export default function SignIn() {
   const { signIn, isSigningIn, auth } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(auth.user) {
+      navigate("/");
+    }
+  }, [auth.user]);
 
   const {
     register,
@@ -23,10 +32,6 @@ export default function SignIn() {
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema)
   });
-
-
-  console.log(auth.message);
-
 
   return (
     <div className="h-screen flex flex-col justify-center items-center space-y-4">
