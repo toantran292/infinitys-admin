@@ -1,11 +1,12 @@
 import {
   createContext,
   useState,
-  useEffect, useContext
+  useEffect, useContext, type PropsWithChildren
 } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 import { instance } from "~/common/api";
+import {useNavigate} from "react-router";
 
 type SignInFormData = {
   email: string;
@@ -54,9 +55,9 @@ const AuthContext = createContext<Context>({
   isSigningIn: false
 });
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children } : PropsWithChildren) => {
   const [auth, setAuth] = useState<Auth>(defaultAuth);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedToken = localStorage.getItem("accessToken");
@@ -91,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("accessToken");
     }
-    window.location.href = "/";
+    navigate("/sign-in");
   };
 
   const { mutate: signIn, isPending: isSigningIn } = useMutation({
@@ -115,7 +116,7 @@ export const AuthProvider = ({ children }) => {
           if (typeof window !== "undefined") {
             localStorage.setItem("accessToken", result.token);
           }
-          window.location.href = "/home";
+          navigate("/");
         } catch (error) {
           console.error("Token decode error:", error);
         }
@@ -125,6 +126,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Error signing in:", error);
       setAuth({
         ...defaultAuth,
+        // @ts-ignore
         message: error.response.data.message
       });
     }
