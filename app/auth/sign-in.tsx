@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { config } from "~/common/config";
+import { useAuth } from "~/providers/auth-provider";
 
 type SignInFormData = {
   email: string;
@@ -13,6 +15,8 @@ const signInSchema = z.object({
 });
 
 export default function SignIn() {
+  const { signIn, isSigningIn, auth } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -21,15 +25,17 @@ export default function SignIn() {
     resolver: zodResolver(signInSchema)
   });
 
+  console.log(config);
+
   return (
     <div className="h-screen flex flex-col justify-center items-center space-y-4">
-      <h1>Đăng nhập</h1>
+      <h1 className="font-bold text-xl">Đăng nhập</h1>
       <form
-      // onSubmit={
-      // handleSubmit((data: SignInFormData) => signIn(data))
-      // }
+        onSubmit={
+          handleSubmit((data: SignInFormData) => signIn(data))
+        }
       >
-        <div className="space-y-3">
+        <div className="space-y-3 w-[250px]">
           <div>
             <label
               className="mb-3 block font-medium text-black text-sm"
@@ -38,8 +44,8 @@ export default function SignIn() {
               Email
             </label>
             <input
-              /*{...register("email")}*/
-              className="block h-12 w-full appearance-none rounded-xl bg-white px-4 py-2 text-amber-500 placeholder-neutral-300 duration-200 focus:outline-none focus:ring-neutral-300 sm:text-sm border"
+              {...register("email")}
+              className="block h-12 w-full rounded-lg bg-white px-4 py-2 text-sm border"
               id="name"
               placeholder="Nhập email..."
               type="text"
@@ -58,8 +64,8 @@ export default function SignIn() {
               Mật khẩu
             </label>
             <input
-              /*{...register("password")}*/
-              className="block h-12 w-full appearance-none rounded-xl bg-white px-4 py-2 text-amber-500 placeholder-neutral-300 duration-200 focus:outline-none focus:ring-neutral-300 sm:text-sm border"
+              {...register("password")}
+              className="block h-12 w-full rounded-lg bg-white px-4 py-2 text-sm border"
               id="password"
               placeholder="Nhập mật khẩu..."
               type="password"
@@ -74,10 +80,9 @@ export default function SignIn() {
             <button
               className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-neutral-900 px-5 py-3 font-medium text-white duration-200 hover:bg-neutral-700 focus:ring-2 focus:ring-black focus:ring-offset-2"
               type="submit"
-              // disabled={isSigningIn}
+              disabled={isSigningIn}
             >
-              {/*{isSigningIn ? "Đang xử lý..." : "Đăng nhập"}*/}
-              Dang nhap
+              {isSigningIn ? "Đang xử lý..." : "Đăng nhập"}
             </button>
           </div>
         </div>

@@ -9,6 +9,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { QueryClientProviderWrapper } from "~/providers/query-client";
+import { AuthProvider } from "~/providers/auth-provider";
 
 // export const links: Route.LinksFunction = () => [
 //   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,7 +35,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <Links />
     </head>
     <body>
-    {children}
+    <QueryClientProviderWrapper>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </QueryClientProviderWrapper>
     <ScrollRestoration />
     <Scripts />
     </body>
