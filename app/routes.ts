@@ -11,7 +11,8 @@ export default [
     layout("components/default.layout.tsx", [
       index("routes/home.tsx"),
       route("problems", "routes/problems/problems.tsx"),
-      route("problems/:id", "routes/problems-id/problems-id.tsx")
+      route("problems/:id", "routes/problems-id/problems-id.tsx"),
+      route("/page", "routes/pages.tsx"),
     ])
   ])
 ] satisfies RouteConfig;
