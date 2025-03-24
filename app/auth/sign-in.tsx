@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuth } from "~/providers/auth-provider";
-import {useEffect} from "react";
-import {useNavigate} from "react-router";
+import { useAuth } from "@/providers/auth-provider";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 type SignInFormData = {
   email: string;
@@ -20,7 +20,7 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(auth.user) {
+    if (auth.user) {
       navigate("/");
     }
   }, [auth.user]);

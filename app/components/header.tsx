@@ -1,7 +1,7 @@
-import {Link} from "react-router";
+import { Link } from "react-router";
 import { FaUserCircle } from "react-icons/fa";
-import {useAuth} from "~/providers/auth-provider";
-import {useState} from "react";
+import { useAuth } from "@/providers/auth-provider";
+import { useState } from "react";
 
 const Header = () => {
     const { auth, signOut } = useAuth();

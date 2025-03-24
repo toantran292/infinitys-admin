@@ -3,20 +3,15 @@ import {
   useState,
   useEffect, useContext, type PropsWithChildren
 } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
-import { instance } from "~/common/api";
-import {useNavigate} from "react-router";
+import { instance } from "@/common/api";
+import { useNavigate } from "react-router";
+import type { User } from "@/types/users";
 
 type SignInFormData = {
   email: string;
   password: string;
-};
-
-
-type User = {
-  id: string;
-  email: string;
 };
 
 type Auth = {
@@ -31,6 +26,8 @@ type Context = {
   signOut: () => void;
   signIn: (data: SignInFormData) => void;
   isSigningIn: boolean;
+  user: User | null;
+  isGettingUser: boolean;
 };
 
 const defaultAuth: Auth = {
@@ -52,38 +49,33 @@ const AuthContext = createContext<Context>({
   },
   signIn: () => {
   },
-  isSigningIn: false
+  isSigningIn: false,
+  isGettingUser: true,
+  user: null
 });
 
-export const AuthProvider = ({ children } : PropsWithChildren) => {
-  const [auth, setAuth] = useState<Auth>(defaultAuth);
+export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const [auth, setAuth] = useState<Auth>(() => {
+    if (typeof window !== 'undefined') {
+      const savedToken = localStorage.getItem("accessToken");
+      if (savedToken) {
+        return {
+          message: "",
+          token: savedToken,
+        };
+      }
+    }
+    return defaultAuth;
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("accessToken");
-    if (savedToken) {
-      try {
-        const decoded = jwtDecode<Decoded>(savedToken);
-        setAuth({
-          message: "",
-          token: savedToken,
-          user: {
-            id: decoded.sub,
-            email: decoded.email
-          }
-        });
-      } catch {
-        setAuth(defaultAuth);
+    if (typeof window !== 'undefined') {
+      if (auth.token) {
+        localStorage.setItem("accessToken", auth.token);
+      } else {
+        localStorage.removeItem("accessToken");
       }
-    }
-  }, []);
-
-  useEffect(() => {
-
-    if (auth.token) {
-      localStorage.setItem("accessToken", auth.token);
-    } else {
-      localStorage.removeItem("accessToken");
     }
   }, [auth.token]);
 
@@ -95,27 +87,30 @@ export const AuthProvider = ({ children } : PropsWithChildren) => {
     navigate("/sign-in");
   };
 
+  const { data: userData, isLoading: isGettingUser } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      if (!auth.token) return null;
+      const response = await instance.get("/auths/me");
+      return response.data;
+    },
+    enabled: typeof window !== 'undefined' && (!!auth.token || !!localStorage.getItem("accessToken")),
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
   const { mutate: signIn, isPending: isSigningIn } = useMutation({
     mutationFn: async (data: SignInFormData) => {
-      const response = await instance.post("/auths/signin", data);
+      const response = await instance.post("/auths/login", data);
       return response.data;
     },
     onSuccess: (result) => {
-      if (result.token) {
+      if (result.token && result.token.accessToken) {
         try {
-          const decoded = jwtDecode<Decoded>(result.token);
           setAuth({
             message: result.message,
-            token: result.token,
-            user: {
-              id: decoded.sub,
-              email: decoded.email
-            }
+            token: result.token.accessToken,
           });
-
-          if (typeof window !== "undefined") {
-            localStorage.setItem("accessToken", result.token);
-          }
           navigate("/");
         } catch (error) {
           console.error("Token decode error:", error);
@@ -132,15 +127,16 @@ export const AuthProvider = ({ children } : PropsWithChildren) => {
     }
   });
 
-
   return (
     <AuthContext.Provider
       value={{
         auth,
+        user: userData || null,
         setAuth,
         signOut,
         signIn,
-        isSigningIn
+        isSigningIn,
+        isGettingUser
       }}
     >
       {children}
