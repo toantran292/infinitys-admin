@@ -33,7 +33,7 @@ const data = {
     },
     {
       title: "Pages",
-      url: "#",
+      url: "/pages",
       icon: Building,
 
     },
