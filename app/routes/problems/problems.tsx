@@ -28,46 +28,21 @@ import TiptapEditor from "./editor-component"
 import { Label } from "@/components/ui/label"
 import { useS3Upload } from "@/hooks/use-s3-upload"
 import { Link } from "react-router"
+import { ProblemForm, type ProblemFormData } from "./problem-form"
+
 export const ProblemHeader = () => {
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
     const [open, setOpen] = useState(false)
     const queryClient = useQueryClient()
-    const filesRef = useRef<File[]>([])
-
-    const { uploadMultipleToS3 } = useS3Upload({
-        type: 'images',
-        prefix: "problems"
-    });
 
     const { mutate: createProblem, isPending } = useMutation({
-        mutationFn: async (data: { content: string, title: string }) => {
-            const { content, title } = data
-            let imageKeys: { key: string; name: string; content_type: string; size: number }[] = [];
-
-            if (filesRef.current && filesRef.current.length > 0) {
-                const results = await uploadMultipleToS3(filesRef.current);
-                imageKeys = results.map((result, index) => ({
-                    key: result.key,
-                    name: filesRef.current[index].name,
-                    content_type: filesRef.current[index].type,
-                    size: filesRef.current[index].size
-                }));
-            }
-
-            const response = await instance.post('/problems', {
-                title,
-                content,
-                images: imageKeys
-            })
-
+        mutationFn: async (data: ProblemFormData) => {
+            const response = await instance.post('/problems', data)
             return response.data
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['problems'] })
             toast.success('Tạo problem thành công')
             setOpen(false)
-            setContent('')
         },
         onError: () => {
             toast.error('Có lỗi xảy ra khi tạo problem')
@@ -82,34 +57,16 @@ export const ProblemHeader = () => {
                     Tạo Problem
                 </Button>
             </DialogTrigger>
-            <DialogContent className="p-4">
+            <DialogContent className="max-w-3xl p-4">
                 <DialogHeader>
-                    <DialogTitle>Tạo Problem</DialogTitle>
+                    <DialogTitle>Tạo Problem Mới</DialogTitle>
                 </DialogHeader>
-
-                <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-                    <div className="mb-4 space-y-2">
-                        <Label>Tiêu đề problem</Label>
-                        <Input
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Nội dung problem</Label>
-                        <TiptapEditor content={content} setContent={setContent} filesRef={filesRef} />
-                    </div>
+                <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+                    <ProblemForm
+                        onSubmit={createProblem}
+                        isSubmitting={isPending}
+                    />
                 </div>
-
-                <DialogFooter className="border-t border-gray-200">
-                    <Button
-                        className="bg-primary text-white rounded-full mt-4 px-4 text-sm"
-                        onClick={() => createProblem({ content, title })}
-                        disabled={isPending}
-                    >
-                        {isPending ? "Đang tạo..." : "Tạo Problem"}
-                    </Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     )
