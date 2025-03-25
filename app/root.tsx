@@ -12,6 +12,7 @@ import "./app.css";
 import { QueryClientProviderWrapper } from "@/providers/query-client";
 import { AuthProvider } from "@/providers/auth-provider";
 import { Toaster } from "sonner";
+import {PageProvider} from "@/providers/page-provider";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -24,10 +25,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryClientProviderWrapper>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-          <Toaster richColors />
+          <PageProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+            <Toaster richColors />
+          </PageProvider>
         </QueryClientProviderWrapper>
         <ScrollRestoration />
         <Scripts />
