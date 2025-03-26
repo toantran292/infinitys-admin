@@ -111,10 +111,14 @@ export default function ProblemId() {
     })
 
     const handleTestCaseUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(event.target.files || []).map((f) => ({
-            ...f,
-            name: getFileName(f)
-        }));
+        const files = Array.from(event.target.files || []).map((file, index) => {
+            // Create a new File object with modified name but same content
+            return new File(
+                [file],
+                getFileName(file),
+                { type: file.type }
+            )
+        });
 
         if (files && files.length > 0) {
             try {
@@ -132,13 +136,12 @@ export default function ProblemId() {
 
                 queryClient.invalidateQueries({ queryKey: ['problem', id] });
                 toast.success('Upload testcase thành công')
+                if (testcaseInputRef.current) {
+                    testcaseInputRef.current.value = ''
+                }
             } catch (error) {
                 toast.error('Có lỗi xảy ra khi upload testcase')
             }
-        }
-
-        if (testcaseInputRef.current) {
-            testcaseInputRef.current.value = ''
         }
     };
 
