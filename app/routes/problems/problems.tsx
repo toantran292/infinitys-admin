@@ -24,9 +24,6 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 
-import TiptapEditor from "./editor-component"
-import { Label } from "@/components/ui/label"
-import { useS3Upload } from "@/hooks/use-s3-upload"
 import { Link } from "react-router"
 import { ProblemForm, type ProblemFormData } from "./problem-form"
 
@@ -123,7 +120,7 @@ export default function Problems() {
                                 <TableRow key={problem.id}>
                                     <TableCell className="font-medium">{problem.title}</TableCell>
                                     <TableCell>
-                                        {problem.testcases.length || 0}
+                                        {problem?.testcases?.length || 0}
                                     </TableCell>
                                     <TableCell>
                                         {new Date(problem.createdAt).toLocaleDateString()}
