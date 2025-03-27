@@ -44,7 +44,7 @@ export default function AdminPages() {
 
     const approveMutation = useMutation({
         mutationFn: async (pageId: string) => {
-            await instance.post(`/api/pages/${pageId}/approve`);
+            await instance.post(`/pages/${pageId}/approve`);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["pages"] });
@@ -53,7 +53,7 @@ export default function AdminPages() {
 
     const rejectMutation = useMutation({
         mutationFn: async (pageId: string) => {
-            await instance.post(`/api/pages/${pageId}/reject`);
+            await instance.post(`/pages/${pageId}/reject`);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["pages"] });
