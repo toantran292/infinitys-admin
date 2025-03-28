@@ -33,15 +33,15 @@ const data = {
     },
     {
       title: "Pages",
-      url: "#",
+      url: "/pages",
       icon: Building,
 
     },
-    {
-      title: "Users",
-      url: "#",
-      icon: Users,
-    },
+    // {
+    //   title: "Users",
+    //   url: "#",
+    //   icon: Users,
+    // },
   ],
 }
 
